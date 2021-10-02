@@ -34,12 +34,12 @@ select count(data) from users;
 select * from users;
 
 create index idx_data on users using gin (data);
-explain analyse select * from users where data->'address'->>'street' = 'e16f3f8d-f565-4f4f-b900-27054eb881ed';
-explain analyse select * from users where data @> '{"address": {"street": "e16f3f8d-f565-4f4f-b900-27054eb881ed"} }';
+explain analyse select * from users where data->'address'->>'street' = 'e16f3f8d-f565-4f4f-b900-27054eb881ed'; -- not use index
+explain analyse select * from users where data @> '{"address": {"street": "e16f3f8d-f565-4f4f-b900-27054eb881ed"} }'; -- use index
 
 create index idx_province on users((data->'address'->>'province'));
-explain analyse select * from users where data->'address'->>'province' = 'ca4a799d-d4d2-4f8c-b2aa-d60355ae4006';
-explain analyse select * from users where data->'address'->>'province' in( 'ca4a799d-d4d2-4f8c-b2aa-d60355ae4006');
+explain analyse select * from users where data->'address'->>'province' = 'ca4a799d-d4d2-4f8c-b2aa-d60355ae4006'; -- use index
+explain analyse select * from users where data->'address'->>'province' in( 'ca4a799d-d4d2-4f8c-b2aa-d60355ae4006'); -- use index
 ```
 
 ### Sample JSONB data 
